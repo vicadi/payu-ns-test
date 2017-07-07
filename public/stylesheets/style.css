@@ -1,8 +1,76 @@
 body {
-  padding: 50px;
+  padding: 3%;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
+}
+
+.emptyMessage {
+	font-weight: bold;
+    color: red;
+    font-size: 1.2em;
+}
+
+li {
+	margin-bottom: 7px;
+    font-size: 1.2em;
+}
+
+li > button {
+	margin-left: 6px;
+}
+
+button > span {
+	color: green;
+}
+
+table{
+  margin-left: 2%;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+th, td{
+    padding: 10px;
+}
+
+.center{
+  text-align: center;
+}
+
+.right{
+  text-align: right;
+}
+
+section{
+  padding: 5px;
+  border: 1px groove black;
+  margin: 1%;
+}
+
+#h3Total{
+  width: 100%;
+  text-align: right;
+}
+
+#divTotal{
+  width: 100%;
+  padding: 1%;
+  float: left;
+}
+
+#divLeft{
+  width: 48%;
+  padding: 1%;
+  float: left;
+}
+
+#divRight{
+  width: 48%;
+  padding: 1%;
+  float: right;
 }

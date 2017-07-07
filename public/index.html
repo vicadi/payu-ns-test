@@ -6,108 +6,129 @@
     <title> Geek Store</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
-    <style>
-        .emptyMessage {
-            font-weight: bold;
-            color: red;
-            font-size: 1.2em;
-        }
-        li {
-            margin-bottom: 7px;
-            font-size: 1.2em;
-        }
-
-        li > button {
-
-            margin-left: 6px;
-        }
-        button > span {
-            color: green;
-        }
-    </style>
-
+    <link rel="stylesheet" href="stylesheets/style.css">
     <script src="javascripts/angular.min.js"></script>
-    <script src="javascripts/app.js"></script>
-
-
+    <script src="javascripts/jquery-3.2.1.min.js"></script>
+    <script src="javascripts/script.js"></script>
+    <script src="javascripts/app.js"></script>    
+    <script src='javascripts/pdfmake.min.js'></script> 
+    <script src='javascripts/vfs_fonts.js'></script>
 </head>
+
 <body>
-<div class="container" ng-controller="ProductsController" >
-    <h1>Tienda de Figuras de Coleccion</h1>
-
-    <div class="row">
-
-
-        <!-- To Buy List -->
-        <div class="col-md-8" >
-
-
-            <label for="user"> Producto: <select class="form-control" ng-model="product" id="user">
-                <option value="Maestro Yoda"> Maestro Yoda </option>
-                <option value="Sable laser de plástico"> Sable laser de plástico </option>
-                <option value="Nave espacial Halcón Milenario">Nave espacial Halcón Milenario </option>
-                <option value="Estrella de la muerte">Estrella de la muerte </option>
-                <option value="R2D2 en fichas de Lego">R2D2 en fichas de Lego </option>
-                <option value="Jar Jar Binks Gobernador">Jar Jar Binks Gobernador </option>
-
-            </select>
-            </label>
-            <label for="quantity">Cantidad: <input class="form-control" ng-model="quantity" id="quantity"> </label>
-            <label for="value">Precio: <input class="form-control" ng-model="value" id="value"> </label>
-            <button class="btn btn-default" ng-click="addProduct()"><span class="glyphicon glyphicon-ok"></span> Create</button></br>
-            <h2>Productos Agregados</h2>
-            <ul >
-                <li ng-repeat=" product in products" >
-                    Name: {{product.name}} , Quantity: {{product.quantity}}  Value:  {{product.value | currency:"COP$"}}
-                    <button class="btn btn-default" ng-click="removeProduct(product.name)"><span class="glyphicon glyphicon-remove"></span> Remove</button>
-                </li>
-            </ul>
-             <button class="btn btn-default" ng-click="buyProducts()"><span class="glyphicon glyphicon-download"></span> Comprar</button>
-
-        </div>
-
-        <!-- Already Bought List -->
-
-    </div>
-
+    <div class="container" ng-controller="ProductsController" >
+        <h1>Tienda de Figuras de Coleccion</h1>
+        <br><br>
         <div class="row">
-                        <div class="col-md-6" >
+            <!-- To Buy List -->
+            <div class="col-md-12" >
                 <div class="row">
-                    <h2>Factura emitida </h2>
-                   <span  class="emptyMessage">Factura de la compra actualmente realizada</span>
+                    <label for="idClient">Identificación: 
+                    <input class="form-control" ng-model="idClient" id="idClient"> </label>
+                    <label for="nameClient">Nombre: 
+                    <input class="form-control" ng-model="nameClient" id="nameClient"> </label>
+                    <button class="btn btn-default" ng-click="removeAll()"><span class="glyphicon glyphicon-user"></span> New Client </button>
                 </div>
+                <br><br>
                 <div class="row">
-                    <div class="col-md-6"   >
-
-                        <h3>Detalle:</h3>
-                        <button class="btn btn-default" ng-click="updateValue()"><span class="glyphicon glyphicon-upload"></span> Imprimir</button>
-
-                    </div>
-
-
+                    <label for="product"> Producto:<select class="form-control" ng-model="product" id="product">
+                        <option value="Maestro Yoda -COP-75000"> Maestro Yoda - COP - 75000 </option>
+                        <option value="Sable laser de plástico -USD-35.00"> Sable laser de plástico - USD - 35.00 </option>
+                        <option value="Nave espacial Halcón Milenario -COP-125000">Nave espacial Halcón Milenario - COP - 125000</option>
+                        <option value="Estrella de la muerte -USD-200.00">Estrella de la muerte - USD - 200.00</option>
+                        <option value="R2D2 en fichas de Lego -MXN-450">R2D2 en fichas de Lego - MXN - 450</option>
+                        <option value="Jar Jar Binks Gobernador -MXN-800">Jar Jar Binks Gobernador - MXN - 800</option>
+                    </select></label>
+                    <label for="quantity">Cantidad:<input class="form-control" type="number" ng-model="quantity" min="1" id="quantity"> </label>
+                    <button class="btn btn-default" ng-click="addProduct()"><span class="glyphicon glyphicon-ok"></span> Create</button></br>                
                 </div>
-                </div>
-
-            <div class="col-md-6" >
+                <br><br>
                 <div class="row">
-                    <h2>Resumen de compras realizadas </h2>
-                    <span  class="emptyMessage"> Detalle de todas las compras realizadas</span>
-                </div>
-                <div class="row">
-                    <div class="col-md-6"   >
-
-
-
-                    </div>
-
-
+                    <h2>Productos Agregados</h2>
+                    <h4 ng-show="idClient!=''">Identificación Cliente: {{idClient}}</h4>
+                    <h4 ng-show="nameClient!=''">Nombre Cliente: {{nameClient}}</h4>
+                    <ul >
+                        <li ng-repeat=" product in products" >
+                            Name: {{product.name}} , Quantity: {{product.quantity}} , Value COP$:  {{product.valueCop}} , Total COP$: {{product.valueTotal}}
+                            <button class="btn btn-default" ng-click="removeProduct(product.name)"><span class="glyphicon glyphicon-remove"></span> Remove</button>
+                        </li>
+                    </ul>
+                    <button class="btn btn-default" ng-click="buyProducts()"><span class="glyphicon glyphicon-download"></span> Comprar</button>
                 </div>
             </div>
-
+            <!-- Already Bought List -->
         </div>
-
-
-</div>
-
+        <br><br><br>
+        <div class="row" id="divTotal">
+            <div id="divLeft" >
+                <div class="row">
+                    <h2>Factura emitida </h2>
+                    <br>
+                    <span  class="emptyMessage" ng-show="currentInvoice==null">Factura de la compra actualmente realizada</span>
+                    <section ng-show="currentInvoice!=null">
+                        <h3><span class="label label-default">Factura No. {{currentInvoice.key.number}} / Fecha: {{currentInvoice.key.date}}</span></h3>
+                        <br><br>
+                        <span>Identificación Cliente: {{currentInvoice.client.id}}</span>
+                        <br>
+                        <span>Nombre Cliente: {{currentInvoice.client.name}}</span>
+                        <br><br>
+                        <h3><span class="label label-default">Productos:</span></h3>
+                        <br><br><br>
+                        <table ng-show="currentInvoice.products!=null">
+                            <thead>
+                                <tr>
+                                    <td class="center">Producto</td>
+                                    <td class="center">Cantidad</td>
+                                    <td class="center">Valor Unitario COP$</td>
+                                    <td class="center">Iva COP$</td>
+                                    <td class="center">Valor Total COP$</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="product in currentInvoice.products"> 
+                                    <td>{{product.name}}</td> 
+                                    <td class="center">{{product.quantity}}</td>
+                                    <td class="right">{{product.valueCop}}</td>
+                                    <td class="right">{{product.valueIva}}</td>
+                                    <td class="right">{{product.valueTotal}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br><br>
+                        <h3 id="h3Total"><span class="label label-default">Total Factura: {{currentInvoice.totalInvoice}}</span></h3>
+                    </section>
+                </div>
+                <div class="row" ng-show="currentInvoice!=null">
+                    <h3>Detalle:</h3>
+                    <button class="btn btn-default" ng-click="printCurrentInvoice()"><span class="glyphicon glyphicon-upload"></span> Download</button>
+                </div>
+            </div>
+            <div id="divRight">
+                <div class="row">
+                    <h2>Resumen de compras realizadas </h2>
+                    <span  class="emptyMessage" ng-show="invoicesClient==null"> Detalle de todas las compras realizadas</span>
+                    <table ng-show="invoicesClient!=null" id="tableSummary">
+                        <h3 ng-show="invoicesClient!=null"><span>Facturas de {{idClient}} - {{nameClient}}</span></h3>
+                        <thead>
+                            <tr>
+                                <td class="center">No. Factura</td>
+                                <td class="center">Fecha</td>
+                                <td class="center">Detalle</td>
+                                <td class="center">Valor Total COP$</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="invoice in invoicesClient"> 
+                                <td class="center">{{invoice.key.number}}</td> 
+                                <td class="center">{{invoice.key.date}}</td>
+                                <td>{{invoice.detailInvoice}}</td>
+                                <td class="right">{{invoice.totalInvoice}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
